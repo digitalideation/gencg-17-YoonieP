@@ -27,7 +27,7 @@ function draw() {
 
       let diameter = dist(mouseX, mouseY, gridX, gridY);
       diameter = diameter/options.diameter * options.multiplikatorSize;
-      //diameter = diameter/400 * 40;
+      //good values are  diameter / 500 * 50
       push();
       translate(gridX, gridY);
       
