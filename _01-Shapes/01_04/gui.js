@@ -3,8 +3,8 @@ var options = {
   tileCount: 20,
   circleFillColor: [255, 120, 0], //RGB   
   fill: false,
-  columns: 3,
-  rows: 5
+  columns: 2,
+  rows: 2
 };
 
 window.onload = function() {
