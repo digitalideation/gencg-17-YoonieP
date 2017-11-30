@@ -42,8 +42,9 @@ function setup() {
 
 }
 
+
 function draw() {
-    background(200, 20);
+  background(200, 20);
   options.circleFillColor[2] = random(255);
   raseterize();
 
@@ -55,7 +56,7 @@ function draw() {
         xVal = positions[i][b][0];
         yVal = positions[i][b][1];
         push();
-        translate(500,25)
+        translate(windowWidth/2,windowHeight/2)
         rotate(rotationVal)
         drawCircle(xVal,yVal);
         pop();
@@ -66,7 +67,8 @@ function draw() {
 }
 
 function drawCircle(posX, posY){
-   b = options.circleFillColor;
+
+    b = options.circleFillColor;
     push();
     translate(-1 * (posX/8), -1* (posY/8));
 
