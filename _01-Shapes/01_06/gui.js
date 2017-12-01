@@ -1,5 +1,5 @@
 var options = {
-  diameter: 0,
+  diameter: 500,
   multiplikatorSize:50
  
 };
