@@ -2,8 +2,7 @@
 // The var are initialised in gui.js
 var NUM = 50;
 var NEWEST = NUM - 1;
-var x = [];
-var y =[];
+var count = 5;
 function setup() {
   // Canvas setup
   canvas = createCanvas(windowWidth, windowHeight);
@@ -15,50 +14,27 @@ function setup() {
   // The var are initialised in gui.js
   noStroke();
   noCursor();
-
   fill(255);
-  for ( var i = NUM; i-1  != 0;--i){
-      x[i] = 200, y[i] = 200 ;
-  }
+  createAgents();
+  background(0);
 }
-
+	
 var ybool = false;
 var xbool = false;
 function draw() {
-  background(-1);
-  for ( var i = 0; i != NEWEST;i++){
-    ellipse(x[i] = x[i + 1], y[i] = y[i + 1], i, i);
-  }
-  if (y[NEWEST] >= windowHeight){
-    ybool = true;
-  }
-  if (y[NEWEST] <= 0){
-    ybool = false;
-  }
-  if (x[NEWEST] >= windowWidth){
-    xbool = true;
-  }
-  if (x[NEWEST] <= 0){
-    xbool = false;
-  }
-
-    if (ybool) {
-      yNewVal = y[NEWEST]-5;
-    }
-    else{
-       yNewVal = y[NEWEST]+5;
-    }
-    if (xbool) {
-      xNewVal = x[NEWEST]-5;
-    }
-    else{
-      xNewVal = x[NEWEST]+5;
-    }
-
-  ellipse(x[NEWEST] =  xNewVal, y[NEWEST] = yNewVal, NEWEST, NEWEST);
+	for (var i = 0; i < agentarray.length; i++) {
+		agentarray[i].calculatePos();
+	}
 }
 
 
+var agentarray =[];
+function createAgents(){
+	for (var i = 1; i <= count; i++) {
+		let obj = new AgentBall(random(1200),random(1200));
+		agentarray.push(obj);
+	}
+}
 
 // Tools
 
@@ -82,6 +58,54 @@ function saveThumb(w, h) {
   let img = get( width/2-w/2, height/2-h/2, w, h);
   save(img,'thumb.jpg');
 }
-class agentMeow{
- 
+
+class AgentBall{
+  constructor(xpos,ypos) {
+  	console.log("obj created");
+      this.NUM = 10;
+      this.NEWEST = NUM - 1;
+      this.x = [];
+      this.y = [];
+      this.ybool = false;
+      this.xbool = false;
+      this.xNewVal= 0;
+      this.yNewVal= 0;
+      for ( var i = NUM; i-1  != 0;--i)
+      {
+        this.x[i] = xpos, this.y[i] = ypos ;
+      }
+  }
+
+
+  calculatePos() {
+  	background(-1);
+    for ( var i = 0; i != this.NEWEST;i++){
+      ellipse(this.x[i] = this.x[i + 1], this.y[i] = this.y[i + 1], i, i);
+    }
+    if (this.y[NEWEST] >= windowHeight){
+      this.ybool = true;
+    }
+    if (this.y[NEWEST] <= 0){
+      this.ybool = false;
+    }
+    if (this.x[NEWEST] >= windowWidth){
+      this.xbool = true;
+    }
+    if (this.x[NEWEST] <= 0){
+      this.xbool = false;
+    }
+    if (this.ybool) {
+      this.yNewVal = this.y[NEWEST]-5;
+    }
+    else{
+       this.yNewVal = this.y[NEWEST]+5;
+    }
+    if (this.	xbool) {
+      this.xNewVal = this.x[NEWEST]-5;
+    }
+    else{
+      this.xNewVal = this.x[NEWEST]+5;
+    }
+    ellipse(this.x[NEWEST] = this.xNewVal, this.y[NEWEST] = this.yNewVal, this.NEWEST, this.NEWEST);
+  }
 }
