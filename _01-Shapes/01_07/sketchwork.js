@@ -6,7 +6,7 @@ var x = [];
 var y =[];
 function setup() {
   // Canvas setup
-  canvas = createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(window.outerWidth, window.outerHeight);
   canvas.parent("p5Container");
   // Detect screen density (retina)
   var density = displayDensity();
