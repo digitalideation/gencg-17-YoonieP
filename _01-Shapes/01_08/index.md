@@ -1,8 +1,11 @@
 ---
 layout: sketch
-title: "01_06" 
+title: "01_08" 
 category: "Experiment" 
 thumb_name: "thumb.jpg"
+includes:
+  - src:"sketch.js"
+  - src:"gui.js" 
 ---
 
 <!-- 
