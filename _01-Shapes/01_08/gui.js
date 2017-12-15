@@ -1,12 +1,12 @@
 var options = {
   sizeNoise: 500,
-  hslStartHue: 40,
-  hslBrightness: 40,
+  hslStartHue: 180,
+  hslBrightness: 50,
   hslSaturation: 40,
-  bgColor:[240, 240, 240],
+  bgColor:[23, 22, 22],
   formCount:10,
-  noiseStrength:100,
-  noiseRefreshValue:1000,
+  noiseStrength:395,
+  noiseRefreshValue:3300,
   closeVertex: true
 };
 
