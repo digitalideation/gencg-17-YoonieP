@@ -1,7 +1,6 @@
 // Global var
 // The var are initialised in gui.js
 var formResolution = 10;
-
 var initRadius = 40;
 var centerX;
 var centerY;
@@ -28,7 +27,8 @@ function setup() {
   x = [formResolution];
   y = [formResolution];
   var angle = radians(360/float(formResolution));
-  for (var i=0; i<formResolution; i++){
+  for (var i=0; i<formResolution; i++)
+  {
     x[i] = cos(angle*i) * initRadius;
     y[i] = sin(angle*i) * initRadius;  
   }
@@ -37,7 +37,7 @@ function setup() {
 }
 
 function drawdifferentShape(){
-  // Create points array
+  // Colormapping
   let startHue = toInt(map(mouseY, 0, width, options.hslStartHue,options.hslStartHue + 80));
   let targetHue = toInt(map(mouseY, 0, height,options.hslStartHue, options.hslStartHue + 80));
   let startBright = toInt(map(mouseY, 0, width, 0,options.hslBrightness));
@@ -48,36 +48,47 @@ function drawdifferentShape(){
   let brightness  = lerp(startBright,targetBright,formResolution);
   stroke(hue,brightness,saturation,0.5); */
   let faderX = centerX/width;
-  let t = millis()/1000;
+  let t = millis()/options.noiseRefreshValue;
   let r = map(options.sizeNoise,0,200,10,initRadius);
   let angle = radians(360/formResolution);
-
-  for (let i=0; i<formResolution; i++){
-    let radiusRand = r - noise(t, i*faderX)*100;
+  //calculate the startingPoints of curveVertex
+  for (let i=0; i<formResolution; i++)
+  {
+    let radiusRand = r - noise(t, i*faderX)*options.noiseStrength;
     let xPos = centerX + cos(angle*i)*radiusRand;
     let yPos = centerY + sin(angle*i)*radiusRand;
     points[i] = createVector(xPos,yPos);
   }
 
   beginShape();
-  for (let i=0; i<formResolution; i++){
+  for (let i=0; i<formResolution; i++)
+  {
+    //lerp value jumps between 0.0 and 1.0
     let hue  = lerp(startHue,targetHue,i/formResolution);
     let brightness  = lerp(startBright,targetBright,i/formResolution);
     stroke(hue,brightness,saturation,0.5); 
     noFill();
-
     curveVertex(points[i].x, points[i].y);
     if (i==0 || i==count-1)
     { 
       curveVertex(points[i].x, points[i].y);
     }
   }
-  endShape(CLOSE);
+  if (options.closeVertex)
+  {
+     endShape(CLOSE);
+  }
+  else
+  {
+    endShape();
+  }
+
 }
 
 function setmousePos(){
   //Smooth follow of the mouse
-   if (mouseX != 0 || mouseY != 0) {
+   if (mouseX != 0 || mouseY != 0) 
+   {
     centerX += (mouseX-centerX) * 0.01;
     centerY += (mouseY-centerY) * 0.01;
   }
@@ -85,35 +96,37 @@ function setmousePos(){
 
 function draw() {
   setmousePos();
-  //calculatePoints();
-  //drawShape();
   drawdifferentShape();
 }
 
-// Tools
 
 // resize canvas when the window is resized
-function windowResized() {
+function windowResized() 
+{
   resizeCanvas(windowWidth, windowHeight, false);
 }
-function keyPressed() {
+function keyPressed() 
+{
   // Clear sketch
   if (keyCode === 32) setup(); // 32 = SPACE BAR 
   if (key == 's' || key == 'S') saveThumb(650, 350);
 }
 
 // Int conversion
-function toInt(value) {
+function toInt(value) 
+{
   return ~~value;
 }
 
 // Timestamp
-function timestamp() {
+function timestamp() 
+{
   return Date.now();
 }
 
 // Thumb
-function saveThumb(w, h) {
+function saveThumb(w, h)
+{
   let img = get( width/2-w/2, height/2-h/2, w, h);
   save(img,'thumb.jpg');
 }
