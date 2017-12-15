@@ -11,7 +11,7 @@ var points = [formResolution]
 
 function setup() {
   // Canvas setup
-  canvas = createCanvas(width, height);
+  canvas = createCanvas(windowWidth, windowHeight);
   canvas.parent("p5Container");
   // Detect screen density (retina)
   var density = displayDensity();
