@@ -1,84 +1,125 @@
-// Based on the code P_2_1_1_01.pde from
-// Generative Gestaltung, ISBN: 978-3-87439-759-9
-
 // Global var
-var tileCount, actRandomSeed, actStrokeCap;
- 
+// The var are initialised in gui.js
+var formResolution = 10;
+var initRadius = 40;
+var centerX;
+var centerY;
+var x = [formResolution];
+var y = [formResolution];
+var actRandomSeed, count;
+var points = [formResolution]
+
 function setup() {
   // Canvas setup
-  canvas = createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(window.outerWidth-45, window.outerHeight-180);
   canvas.parent("p5Container");
   // Detect screen density (retina)
   var density = displayDensity();
   pixelDensity(density);
-  // Colors and drawing modes
+  // The var are initialised in gui.js
+  fill(255);
   smooth();
-  // Init Var
-  tileCount = 20;
-  actRandomSeed = 0;
-  actStrokeCap = ROUND; 
+
+  // init form
+  centerX = width/2; 
+  centerY = height/2;
+  formResolution = 10;
+  x = [formResolution];
+  y = [formResolution];
+  var angle = radians(360/float(formResolution));
+  for (var i=0; i<formResolution; i++)
+  {
+    x[i] = cos(angle*i) * initRadius;
+    y[i] = sin(angle*i) * initRadius;  
+  }
+  colorMode(RGB);
+  background([23, 22, 22])
 }
 
-function draw() {
-  // Canvas draw options
-  background(255);
-  smooth();
-  noFill();
+function drawdifferentShape(){
+  // Colormapping
+  let startHue = toInt(map(mouseY, 0, width, 180,180 + 80));
+  let targetHue = toInt(map(mouseY, 0, height,180, 180 + 80));
+  let startBright = toInt(map(mouseY, 0, width, 0,50));
+  let targetBright = toInt(map(mouseY, 0, height,0, 50));
+  let saturation = 40; 
+  colorMode(HSL);
+  /*let hue  = lerp(startHue,targetHue,formResolution);
+  let brightness  = lerp(startBright,targetBright,formResolution);
+  stroke(hue,brightness,saturation,0.5); */
+  let faderX = centerX/width;
+  let t = millis()/3300;
+  let r = map(500,0,200,10,initRadius);
+  let angle = radians(360/formResolution);
+  //calculate the startingPoints of curveVertex
+  for (let i=0; i<formResolution; i++)
+  {
+    let radiusRand = r - noise(t, i*faderX)*395;
+    let xPos = centerX + cos(angle*i)*radiusRand;
+    let yPos = centerY + sin(angle*i)*radiusRand;
+    points[i] = createVector(xPos,yPos);
+  }
 
-  // Stroke options
-  strokeCap(actStrokeCap);
-  randomSeed(actRandomSeed);
-
-  for (let gridX = 0; gridX < tileCount; gridX++) {
-    for (let gridY = 0; gridY < tileCount; gridY++) {
-
-      let posX = width / tileCount * gridX;
-      let posY = width / tileCount * gridY;
-
-      let toggle = toInt(random(0, 2));
-
-      if (toggle == 0) {
-        strokeWeight(mouseX / 20);
-        line(posX, posY, posX + width / tileCount, posY + height / tileCount);
-
-      } else if (toggle == 1) {
-        strokeWeight(mouseY / 20);
-        line(posX, posY + width / tileCount, posX + height / tileCount, posY);
-      }
+  beginShape();
+  for (let i=0; i<formResolution; i++)
+  {
+    //lerp value jumps between 0.0 and 1.0
+    let hue  = lerp(startHue,targetHue,i/formResolution);
+    let brightness  = lerp(startBright,targetBright,i/formResolution);
+    stroke(hue,brightness,saturation,0.5); 
+    noFill();
+    curveVertex(points[i].x, points[i].y);
+    if (i==0 || i==count-1)
+    { 
+      curveVertex(points[i].x, points[i].y);
     }
+  }
+  endShape(CLOSE);
+}
+
+function setmousePos(){
+  //Smooth follow of the mouse
+   if (mouseX != 0 || mouseY != 0) 
+   {
+    centerX += (mouseX-centerX) * 0.01;
+    centerY += (mouseY-centerY) * 0.01;
   }
 }
 
-function mousePressed() {
-  actRandomSeed = toInt(random(100000));
+function draw() {
+  setmousePos();
+  drawdifferentShape();
 }
 
-function keyPressed() {
-  if (key == 's' || key == 'S') saveThumb(650, 350);
-  if (key == '1') actStrokeCap = ROUND;
-  if (key == '2') actStrokeCap = SQUARE;
-  if (key == '3') actStrokeCap = PROJECT;
-}
-
-// Tools
 
 // resize canvas when the window is resized
-function windowResized() {
+function windowResized() 
+{
   resizeCanvas(windowWidth, windowHeight, false);
+}
+function keyPressed() 
+{
+  // Clear sketch
+  if (keyCode === 32) setup(); // 32 = SPACE BAR 
+  if (key == 's' || key == 'S') saveThumb(650, 350);
 }
 
 // Int conversion
-function toInt(value) {
+function toInt(value) 
+{
   return ~~value;
 }
 
 // Timestamp
-function timestamp() {
+function timestamp() 
+{
   return Date.now();
 }
 
 // Thumb
-function saveThumb(w, h) {
+function saveThumb(w, h)
+{
   let img = get( width/2-w/2, height/2-h/2, w, h);
   save(img,'thumb.jpg');
 }
+
