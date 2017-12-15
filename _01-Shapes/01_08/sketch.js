@@ -24,23 +24,29 @@ function setup() {
   // init form
   centerX = width/2; 
   centerY = height/2;
+  formResolution = options.formCount;
+  x = [formResolution];
+  y = [formResolution];
   var angle = radians(360/float(formResolution));
   for (var i=0; i<formResolution; i++){
     x[i] = cos(angle*i) * initRadius;
     y[i] = sin(angle*i) * initRadius;  
   }
-  background(240)
+  colorMode(RGB);
+  background(options.bgColor)
 }
 
 function drawdifferentShape(){
   // Create points array
-  let startHue = toInt(map(mouseY, 0, width, 180,220 ));
-  let targetHue = toInt(map(mouseY, 0, height,180, 220  ));
-  let startBright = toInt(map(mouseY, 0, width, 40,80 ));
-  let targetBright = toInt(map(mouseY, 0, height,40, 80  ));
-  let saturation = 40; 
+  let startHue = toInt(map(mouseY, 0, width, options.hslStartHue,options.hslStartHue + 80));
+  let targetHue = toInt(map(mouseY, 0, height,options.hslStartHue, options.hslStartHue + 80));
+  let startBright = toInt(map(mouseY, 0, width, 0,options.hslBrightness));
+  let targetBright = toInt(map(mouseY, 0, height,0, options.hslBrightness));
+  let saturation = options.hslSaturation; 
   colorMode(HSL);
-
+  /*let hue  = lerp(startHue,targetHue,formResolution);
+  let brightness  = lerp(startBright,targetBright,formResolution);
+  stroke(hue,brightness,saturation,0.5); */
   let faderX = centerX/width;
   let t = millis()/1000;
   let r = map(options.sizeNoise,0,200,10,initRadius);
@@ -92,7 +98,7 @@ function windowResized() {
 }
 function keyPressed() {
   // Clear sketch
-  if (keyCode === 32) background(255) // 32 = SPACE BAR 
+  if (keyCode === 32) setup(); // 32 = SPACE BAR 
   if (key == 's' || key == 'S') saveThumb(650, 350);
 }
 
